@@ -6,9 +6,6 @@ Final group project – Backend application
 
 ## Team Members
 
-- Sanchit Verma
-- (To be added)
-- (To be added)
 - Aayushma Nagarkoti
 - Manav Patel
 - Mohit Sharma
