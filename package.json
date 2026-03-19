@@ -25,8 +25,9 @@
   "homepage": "https://github.com/KusumKumari28/prog3271-final-project-group15#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^17.3.1",
-    "express": "^5.1.0"
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mongoose": "^9.3.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
