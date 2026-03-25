@@ -1,9 +1,19 @@
 import express from "express";
-import { testAPI } from "../controllers/testController";
+import authMiddleware, { AuthRequest } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-// simple test route
-router.get("/test", testAPI);
+router.get("/test", (req, res) => {
+  res.json({
+    message: "Test route working",
+  });
+});
+
+router.get("/protected", authMiddleware, (req: AuthRequest, res) => {
+  res.json({
+    message: "Protected route accessed",
+    user: req.user,
+  });
+});
 
 export default router;
