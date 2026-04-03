@@ -80,7 +80,7 @@ export const loginUser = async (req: Request, res: Response) => {
         id: user._id,
         role: user.role,
       },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_SECRET || "testsecret",
       { expiresIn: "1d" },
     );
 
