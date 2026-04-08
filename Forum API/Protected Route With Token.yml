@@ -8,7 +8,7 @@ http:
   url: http://localhost:3000/api/protected
   headers:
     - name: Authorization
-      value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+      value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzFjOWE5NzM2MjhmZjE4NGQ5YmE3OCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc0NDY5NDAyLCJleHAiOjE3NzQ1NTU4MDJ9.zB9RWWMf2qFOQWHzOKaTFnubfyTOAD61S5pLOBl-Eec
   auth: inherit
 
 settings:

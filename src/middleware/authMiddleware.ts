@@ -34,7 +34,7 @@ const authMiddleware = (
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET as string,
+      process.env.JWT_SECRET || "testsecret",
     ) as JwtPayload;
 
     req.user = decoded;

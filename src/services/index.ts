@@ -1,2 +1,0 @@
-// folder starter file
-export {};

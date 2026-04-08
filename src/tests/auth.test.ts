@@ -25,13 +25,11 @@ afterAll(async () => {
 
 describe("Authentication API Tests", () => {
   it("should register a new user", async () => {
-    const response = await request(app)
-      .post("/api/auth/register")
-      .send({
-        name: "Test User",
-        email: "test@gmail.com",
-        password: "123456"
-      });
+    const response = await request(app).post("/api/auth/register").send({
+      name: "Test User",
+      email: "test@gmail.com",
+      password: "123456",
+    });
 
     expect(response.status).toBe(201);
     expect(response.body.message).toBe("User registered successfully");
@@ -39,41 +37,33 @@ describe("Authentication API Tests", () => {
   });
 
   it("should not register duplicate user", async () => {
-    await request(app)
-      .post("/api/auth/register")
-      .send({
-        name: "Test User",
-        email: "test@gmail.com",
-        password: "123456"
-      });
+    await request(app).post("/api/auth/register").send({
+      name: "Test User",
+      email: "test@gmail.com",
+      password: "123456",
+    });
 
-    const response = await request(app)
-      .post("/api/auth/register")
-      .send({
-        name: "Test User",
-        email: "test@gmail.com",
-        password: "123456"
-      });
+    const response = await request(app).post("/api/auth/register").send({
+      name: "Test User",
+      email: "test@gmail.com",
+      password: "123456",
+    });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("User already exists");
   });
 
   it("should login successfully with correct credentials", async () => {
-    await request(app)
-      .post("/api/auth/register")
-      .send({
-        name: "Test User",
-        email: "test@gmail.com",
-        password: "123456"
-      });
+    await request(app).post("/api/auth/register").send({
+      name: "Test User",
+      email: "test@gmail.com",
+      password: "123456",
+    });
 
-    const response = await request(app)
-      .post("/api/auth/login")
-      .send({
-        email: "test@gmail.com",
-        password: "123456"
-      });
+    const response = await request(app).post("/api/auth/login").send({
+      email: "test@gmail.com",
+      password: "123456",
+    });
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Login successful");
@@ -81,20 +71,16 @@ describe("Authentication API Tests", () => {
   });
 
   it("should fail login with wrong password", async () => {
-    await request(app)
-      .post("/api/auth/register")
-      .send({
-        name: "Test User",
-        email: "test@gmail.com",
-        password: "123456"
-      });
+    await request(app).post("/api/auth/register").send({
+      name: "Test User",
+      email: "test@gmail.com",
+      password: "123456",
+    });
 
-    const response = await request(app)
-      .post("/api/auth/login")
-      .send({
-        email: "test@gmail.com",
-        password: "wrong123"
-      });
+    const response = await request(app).post("/api/auth/login").send({
+      email: "test@gmail.com",
+      password: "wrong123",
+    });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("Invalid email or password");
@@ -105,5 +91,55 @@ describe("Authentication API Tests", () => {
 
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("No token provided");
+  });
+
+  it("should access protected route with valid token", async () => {
+    await request(app).post("/api/auth/register").send({
+      name: "Test User 2",
+      email: "test2@gmail.com",
+      password: "123456",
+    });
+
+    const loginResponse = await request(app).post("/api/auth/login").send({
+      email: "test2@gmail.com",
+      password: "123456",
+    });
+
+    const token = loginResponse.body.token;
+
+    const response = await request(app)
+      .get("/api/protected")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Protected route accessed");
+  });
+
+  it("should access test route", async () => {
+    const response = await request(app).get("/api/test");
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Test route working");
+  });
+
+  it("should deny admin route for normal user", async () => {
+    await request(app).post("/api/auth/register").send({
+      name: "Test User 3",
+      email: "test3@gmail.com",
+      password: "123456",
+    });
+
+    const loginResponse = await request(app).post("/api/auth/login").send({
+      email: "test3@gmail.com",
+      password: "123456",
+    });
+
+    const token = loginResponse.body.token;
+
+    const response = await request(app)
+      .get("/api/admin")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect([401, 403]).toContain(response.status);
   });
 });
