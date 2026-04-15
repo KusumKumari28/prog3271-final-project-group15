@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(logger);
 
 app.use("/api/auth", authRoutes);
-app.use("/api", postRoutes);
+app.use("/api/posts", postRoutes);
 // home route
 app.get("/", (req, res) => {
   res.send("Forum Backend Running");
