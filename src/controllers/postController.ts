@@ -19,7 +19,7 @@ export const createPost = async (req: Request, res: Response) => {
       });
     }
 
-    const newPost = await Post.create({
+    const post = await Post.create({
       title,
       content,
       author: user.id,
@@ -27,11 +27,29 @@ export const createPost = async (req: Request, res: Response) => {
 
     return res.status(201).json({
       message: "Post created successfully",
-      post: newPost,
+      post,
     });
   } catch (error) {
     return res.status(500).json({
       message: "Failed to create post",
+      error,
+    });
+  }
+};
+
+export const getPosts = async (req: Request, res: Response) => {
+  try {
+    const posts = await Post.find()
+      .populate("author", "name email")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "Posts fetched successfully",
+      posts,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to fetch posts",
       error,
     });
   }
