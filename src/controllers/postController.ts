@@ -61,7 +61,7 @@ export const getPosts = async (req: Request, res: Response) => {
 // GET POST BY ID
 export const getPostById = async (req: Request, res: Response) => {
   try {
-  const id = String(req.params.id);
+    const id = String(req.params.id);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
@@ -84,6 +84,61 @@ export const getPostById = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json({
       message: "Failed to fetch post",
+      error,
+    });
+  }
+};
+
+// UPDATE POST
+export const updatePost = async (req: Request, res: Response) => {
+  try {
+    const id = String(req.params.id);
+    const { title, content } = req.body;
+    const user = (req as any).user;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid post ID",
+      });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
+    if (!user || !user.id) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    if (post.author.toString() !== user.id) {
+      return res.status(403).json({
+        message: "You can only update your own post",
+      });
+    }
+
+    if (title !== undefined) {
+      post.title = title;
+    }
+
+    if (content !== undefined) {
+      post.content = content;
+    }
+
+    await post.save();
+
+    return res.status(200).json({
+      message: "Post updated successfully",
+      post,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to update post",
       error,
     });
   }
