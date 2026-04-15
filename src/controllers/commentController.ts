@@ -54,7 +54,7 @@ export const createComment = async (req: Request, res: Response) => {
   }
 };
 
-// GET COMMENTS BY POST ID
+// GET COMMENTS
 export const getCommentsByPostId = async (req: Request, res: Response) => {
   try {
     const postId = String(req.params.postId);
@@ -138,6 +138,51 @@ export const updateComment = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json({
       message: "Failed to update comment",
+      error,
+    });
+  }
+};
+
+// DELETE COMMENT
+export const deleteComment = async (req: Request, res: Response) => {
+  try {
+    const id = String(req.params.id);
+    const user = (req as any).user;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid comment ID",
+      });
+    }
+
+    if (!user || !user.id) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const comment = await Comment.findById(id);
+
+    if (!comment) {
+      return res.status(404).json({
+        message: "Comment not found",
+      });
+    }
+
+    if (comment.author.toString() !== user.id) {
+      return res.status(403).json({
+        message: "You can only delete your own comment",
+      });
+    }
+
+    await Comment.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      message: "Comment deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to delete comment",
       error,
     });
   }
