@@ -143,3 +143,48 @@ export const updatePost = async (req: Request, res: Response) => {
     });
   }
 };
+
+// DELETE POST
+export const deletePost = async (req: Request, res: Response) => {
+  try {
+    const id = String(req.params.id);
+    const user = (req as any).user;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid post ID",
+      });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
+    if (!user || !user.id) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    if (post.author.toString() !== user.id) {
+      return res.status(403).json({
+        message: "You can only delete your own post",
+      });
+    }
+
+    await Post.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      message: "Post deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to delete post",
+      error,
+    });
+  }
+};

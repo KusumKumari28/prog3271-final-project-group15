@@ -4,6 +4,7 @@ import {
   getPosts,
   getPostById,
   updatePost,
+  deletePost,
 } from "../controllers/postController";
 import authMiddleware from "../middleware/authMiddleware";
 
@@ -13,5 +14,6 @@ router.post("/", authMiddleware, createPost);
 router.get("/", getPosts);
 router.get("/:id", getPostById);
 router.put("/:id", authMiddleware, updatePost);
+router.delete("/:id", authMiddleware, deletePost);
 
 export default router;
