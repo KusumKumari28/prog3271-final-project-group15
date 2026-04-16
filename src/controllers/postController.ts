@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Post from "../models/Post";
+import Like from "../models/Like";
 
 // CREATE POST
 export const createPost = async (req: Request, res: Response) => {
@@ -42,17 +43,27 @@ export const createPost = async (req: Request, res: Response) => {
 // GET ALL POSTS
 export const getPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await Post.find()
-      .populate("author", "name email")
-      .sort({ createdAt: -1 });
+    const posts = await Post.find();
+
+    const postsWithLikes = await Promise.all(
+      posts.map(async (post) => {
+        const likeCount = await Like.countDocuments({
+          post: post._id,
+        });
+
+        return {
+          ...post.toObject(),
+          likeCount,
+        };
+      })
+    );
 
     return res.status(200).json({
-      message: "Posts fetched successfully",
-      posts,
+      posts: postsWithLikes,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Failed to fetch posts",
+      message: "Error fetching posts",
       error,
     });
   }
@@ -61,15 +72,9 @@ export const getPosts = async (req: Request, res: Response) => {
 // GET POST BY ID
 export const getPostById = async (req: Request, res: Response) => {
   try {
-    const id = String(req.params.id);
+    const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        message: "Invalid post ID",
-      });
-    }
-
-    const post = await Post.findById(id).populate("author", "name email");
+    const post = await Post.findById(id);
 
     if (!post) {
       return res.status(404).json({
@@ -77,13 +82,19 @@ export const getPostById = async (req: Request, res: Response) => {
       });
     }
 
+    const likeCount = await Like.countDocuments({
+      post: post._id,
+    });
+
     return res.status(200).json({
-      message: "Post fetched successfully",
-      post,
+      post: {
+        ...post.toObject(),
+        likeCount,
+      },
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Failed to fetch post",
+      message: "Error fetching post",
       error,
     });
   }
