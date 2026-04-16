@@ -187,3 +187,28 @@ export const deleteComment = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const adminDeleteComment = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const comment = await Comment.findById(id);
+
+    if (!comment) {
+      return res.status(404).json({
+        message: "Comment not found",
+      });
+    }
+
+    await Comment.deleteOne({ _id: id });
+
+    return res.status(200).json({
+      message: "Comment deleted by admin",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error deleting comment",
+      error,
+    });
+  }
+};
