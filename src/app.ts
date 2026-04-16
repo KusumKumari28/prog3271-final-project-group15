@@ -20,3 +20,5 @@ app.get("/", (req, res) => {
 });
 
 export default app;
+import likeRoutes from "./routes/likeRoutes";
+app.use("/api/likes", likeRoutes);
