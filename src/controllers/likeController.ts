@@ -1,19 +1,24 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import Like from "../models/Like";
 
 export const likePost = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user;
-    const { postId } = req.params;
+    const rawPostId = req.params.postId;
+    const rawUserId = (req as any).user?.id;
 
-    if (!user || !user.id) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
+    const postId = Array.isArray(rawPostId) ? rawPostId[0] : rawPostId;
+    const userId = Array.isArray(rawUserId) ? rawUserId[0] : rawUserId;
+
+    if (!postId) {
+      return res.status(400).json({ message: "Post ID is required" });
     }
 
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const existingLike = await Like.findOne({
-      user: user.id,
+      user: userId,
       post: postId,
     });
 
@@ -23,54 +28,65 @@ export const likePost = async (req: Request, res: Response) => {
       });
     }
 
-    const like = await Like.create({
-      user: user.id,
-      post: postId,
+    const newLike = await Like.create({
+      user: new mongoose.Types.ObjectId(userId),
+      post: new mongoose.Types.ObjectId(postId),
     });
 
     return res.status(201).json({
       message: "Post liked successfully",
-      like,
+      like: newLike,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Error liking post",
-      error,
+      message: "Failed to like post",
     });
   }
 };
 
 export const unlikePost = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user;
-    const { postId } = req.params;
+    const rawPostId = req.params.postId;
+    const rawUserId = (req as any).user?.id;
 
-    if (!user || !user.id) {
+    const postId = Array.isArray(rawPostId) ? rawPostId[0] : rawPostId;
+    const userId = Array.isArray(rawUserId) ? rawUserId[0] : rawUserId;
+
+    if (!userId) {
       return res.status(401).json({
         message: "Unauthorized",
       });
     }
 
-    const like = await Like.findOne({
-      user: user.id,
-      post: postId,
+    if (!postId) {
+      return res.status(400).json({
+        message: "Post ID is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({
+        message: "Invalid post ID",
+      });
+    }
+
+    const deletedLike = await Like.findOneAndDelete({
+      user: new mongoose.Types.ObjectId(userId),
+      post: new mongoose.Types.ObjectId(postId),
     });
 
-    if (!like) {
+    if (!deletedLike) {
       return res.status(404).json({
         message: "Like not found",
       });
     }
-
-    await Like.deleteOne({ _id: like._id });
 
     return res.status(200).json({
       message: "Post unliked successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Error unliking post",
-      error,
+      message: "Failed to unlike post",
     });
   }
 };

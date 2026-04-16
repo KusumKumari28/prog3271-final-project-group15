@@ -9,8 +9,8 @@ const router = Router();
 router.get(
   "/analytics",
   authMiddleware,
-  roleMiddleware("admin"),
-  getAnalytics
+  roleMiddleware(["admin"]),
+  getAnalytics,
 );
 
 export default router;

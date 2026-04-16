@@ -1,64 +1,40 @@
-# PROG3271 Final Project – Group 15
+# Forums Website Backend
 
-## Project Title
+## Project Overview
 
-Forum Backend API
+This project is a backend API for a forums website similar to Reddit.  
+It allows users to register, log in, create posts, comment on posts, and like posts.  
+The system also includes protected routes and admin functionality.  
+The backend is built using Node.js, Express, TypeScript, and MongoDB.
 
 ## Team Members
 
-- Aayushma Nagarkoti
-- Manav Patel
-- Mohit Sharma
-
-## Project Description
-
-This project is a backend application for a forum website similar to Reddit.  
-Users can register, log in, create posts, comment on posts, and like posts.  
-The system also includes role-based authorization for protected and admin-only features.
-
-The application is built with **Node.js** and **TypeScript** using **Express** and **MongoDB**.
-
----
-
-## Main Features
-
-- User registration
-- User login with JWT authentication
-- Protected routes
-- Role-based authorization
-- Create post API
-- Get posts API
-- Get post by ID API
-- Update post API
-- Delete post API
-- Create comment API
-- Get comments API
-- Update comment API
-- Delete comment API
-- Like post
-- Unlike post
-- Admin analytics API
-- Admin delete post API
-- Admin delete comment API
-- Logging middleware
-- Global error handling
-- Unit and integration testing
-
----
+- Sanchit
+- Member 2
+- Member 3
 
 ## Tech Stack
 
 - Node.js
-- TypeScript
 - Express.js
-- MongoDB
-- Mongoose
-- JWT
-- bcryptjs
+- TypeScript
+- MongoDB / Mongoose
+- JWT Authentication
 - Jest
 - Supertest
+- Bruno
 
----
+## Main Features
+
+- User registration and login
+- JWT-based authentication
+- Create, update, delete posts
+- Add comments to posts
+- Like and unlike posts
+- Protected routes
+- Admin routes
+- MongoDB database integration
+- API testing support
 
 ## Project Structure
 
@@ -71,6 +47,7 @@ src/
   routes/
   services/
   tests/
+  utils/
   app.ts
   server.ts
 ```
