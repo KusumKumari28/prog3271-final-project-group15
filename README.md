@@ -9,9 +9,9 @@ The backend is built using Node.js, Express, TypeScript, and MongoDB.
 
 ## Team Members
 
-- Sanchit
-- Member 2
-- Member 3
+- Aayushma Nagarkoti
+- Manav Patel
+- Mohit Sharma
 
 ## Tech Stack
 
