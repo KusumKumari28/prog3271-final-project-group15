@@ -8,3 +8,4 @@ const router = Router();
 router.post("/:postId", authMiddleware, likePost);
 
 export default router;
+import { unlikePost } from "../controllers/likeController";
