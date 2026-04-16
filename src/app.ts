@@ -5,6 +5,7 @@ import logger from "./middleware/logger";
 import authRoutes from "./routes/authRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import adminRoutes from "./routes/adminRoutes";
+import errorMiddleware from "./middleware/errorMiddleware";
 
 const app = express();
 
@@ -24,3 +25,4 @@ app.use("/api/admin", adminRoutes);
 export default app;
 import likeRoutes from "./routes/likeRoutes";
 app.use("/api/likes", likeRoutes);
+app.use(errorMiddleware);
