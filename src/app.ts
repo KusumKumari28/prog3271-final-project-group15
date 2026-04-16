@@ -4,6 +4,7 @@ import postRoutes from "./routes/postRoutes";
 import logger from "./middleware/logger";
 import authRoutes from "./routes/authRoutes";
 import commentRoutes from "./routes/commentRoutes";
+import adminRoutes from "./routes/adminRoutes";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
   res.send("Forum Backend Running");
 });
 
+app.use("/api/admin", adminRoutes);
 export default app;
 import likeRoutes from "./routes/likeRoutes";
 app.use("/api/likes", likeRoutes);

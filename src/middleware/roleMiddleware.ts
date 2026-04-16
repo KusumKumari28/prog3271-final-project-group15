@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { AuthRequest } from "./authMiddleware";
 
+
 const roleMiddleware = (...allowedRoles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
@@ -20,3 +21,9 @@ const roleMiddleware = (...allowedRoles: string[]) => {
 };
 
 export default roleMiddleware;
+
+roleMiddleware("admin")
+
+if (user.role !== role) {
+  return res.status(403).json({ message: "Forbidden" });
+}
