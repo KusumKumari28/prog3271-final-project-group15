@@ -1,0 +1,25 @@
+info:
+  name: Create Post
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: http://localhost:3000/api/posts
+  headers:
+    - name: Authorization
+      value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzFjOWE5NzM2MjhmZjE4NGQ5YmE3OCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc2Mjc4MjE3LCJleHAiOjE3NzYzNjQ2MTd9.cvr_52abEhOqw5xiIx9NwmzfbJWaXilAWYw8JOk-Oiw
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Test Post",
+        "content": "Testing Bruno API"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
