@@ -199,3 +199,28 @@ export const deletePost = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const adminDeletePost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
+    await Post.deleteOne({ _id: id });
+
+    return res.status(200).json({
+      message: "Post deleted by admin",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error deleting post",
+      error,
+    });
+  }
+};
