@@ -51,3 +51,30 @@ src/
   app.ts
   server.ts
 ```
+## Setup Instructions
+
+### Prerequisites
+- Node.js
+- MongoDB installed locally
+
+### Installation
+
+1. Clone the repository
+   git clone https://github.com/KusumKumari28/prog3271-final-project-group15.git
+
+2. Install dependencies
+   npm install
+
+3. Create a .env file in the root folder
+   Copy .env.example and fill in your values:
+   
+   PORT=3000
+   NODE_ENV=development
+   MONGO_URI=mongodb://localhost:27017/forum_db
+   JWT_SECRET=your_secret_key_here
+
+4. Start the server
+   npm run dev
+
+5. Run tests
+   npm test
