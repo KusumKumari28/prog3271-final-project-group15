@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAnalytics } from "../controllers/adminController";
+import { getAnalytics, getAllUsers } from "../controllers/adminController";
 import authMiddleware from "../middleware/authMiddleware";
 import roleMiddleware from "../middleware/roleMiddleware";
 
@@ -11,6 +11,14 @@ router.get(
   authMiddleware,
   roleMiddleware(["admin"]),
   getAnalytics,
+);
+
+// Admin: get all users
+router.get(
+  "/users",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  getAllUsers,
 );
 
 export default router;
