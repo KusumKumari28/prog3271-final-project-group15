@@ -223,4 +223,36 @@ export const adminDeletePost = async (req: Request, res: Response) => {
       error,
     });
   }
+}
+// ADMIN UPDATE POST (super-user can edit any post)
+export const adminUpdatePost = async (req: Request, res: Response) => {
+  try {
+    const id = String(req.params.id);
+    const { title, content } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid post ID" });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (title !== undefined) post.title = title;
+    if (content !== undefined) post.content = content;
+
+    await post.save();
+
+    return res.status(200).json({
+      message: "Post updated by admin",
+      post,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error updating post",
+      error,
+    });
+  }
 };
