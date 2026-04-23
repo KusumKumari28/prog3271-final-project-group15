@@ -1,8 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 
-// simple logger middleware
+// Structured JSON logger middleware (course requirement: Week 3 logging)
 const logger = (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.method + " " + req.url + " - " + new Date().toISOString());
+  const start = Date.now();
+
+  res.on("finish", () => {
+    const log = {
+      level: "info",
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      url: req.originalUrl,
+      status: res.statusCode,
+      responseTimeMs: Date.now() - start,
+    };
+    console.log(JSON.stringify(log));
+  });
+
   next();
 };
 
