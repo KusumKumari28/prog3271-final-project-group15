@@ -6,7 +6,7 @@ import User from "../models/User";
 // register user
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -28,6 +28,7 @@ export const registerUser = async (req: Request, res: Response) => {
       name,
       email,
       password: hashedPassword,
+      role: role === "admin" ? "admin" : "user",
     });
 
     await newUser.save();
